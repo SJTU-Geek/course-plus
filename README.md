@@ -6,7 +6,7 @@ SJTU 学期开课表索引与排课。
 
 ### 在线使用
 
-本项目已部署至 SJTU-Plus ，网址: https://plus.sjtu.edu.cn/course-plus
+本项目已部署至思源极客协会网站 ，网址: https://geek.sjtu.edu.cn/course-plus
 
 ### 从代码运行
 
@@ -16,7 +16,7 @@ SJTU 学期开课表索引与排课。
 
 克隆存储库
 ```
-git clone https://github.com/SJTU-Plus/course-plus.git
+git clone https://github.com/SJTU-Geek/course-plus.git
 cd course-plus
 git submodule init
 git submodule update
