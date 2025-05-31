@@ -177,18 +177,10 @@ function App() {
               <div className='row'>
                 <div className='col d-flex d-row align-items-center'>
                   <p className='text-muted my-1 small'>
-                    <a href='https://github.com/SJTU-Plus/course-plus'>
+                    <a href='https://github.com/SJTU-Geek/course-plus'>
                       本项目
                     </a>{' '}
                     由{' '}
-                    <a
-                      href='https://plus.sjtu.edu.cn/'
-                      target='_blank'
-                      rel='noreferrer'
-                    >
-                      SJTU-Plus
-                    </a>{' '}
-                    开发，
                     <a
                       href='https://geek.sjtu.edu.cn/'
                       target='_blank'
@@ -203,7 +195,7 @@ function App() {
               <div className='row justify-content-end'>
                 <div className='col-auto my-2 p-0 d-flex d-row align-items-center'>
                   <GitHubButton
-                    href='https://github.com/sjtu-plus/course-plus'
+                    href='https://github.com/SJTU-Geek/course-plus'
                     data-show-count
                     data-size='large'
                   >
