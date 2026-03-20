@@ -7,25 +7,16 @@ import forEach from 'lodash/forEach'
 import sortedBy from 'lodash/sortBy'
 import React, { useReducer, useState } from 'react'
 import GitHubButton from 'react-github-btn'
-import {
-  HashRouter as Router,
-  matchPath,
-  Route,
-  Switch,
-  useLocation,
-  useParams,
-} from 'react-router-dom'
+import { HashRouter as Router, Route, Switch } from 'react-router-dom'
 
 import ClassTable from './ClassTable'
-import ClassTableForm from './ClassTableForm'
-import FilterForm from './FilterForm'
 import LessonList from './LessonList'
 import LoginModal from './LoginModal'
+import MobileDrawer from './MobileDrawer'
+import MobileTopBar from './MobileTopBar'
 import Navbar from './Navbar'
-import PlanForm from './PlanForm'
-import SemesterNav from './SemesterNav'
-import ShowClassTable from './ShowClassTable'
-import SyncButton from './SyncButton'
+import Toolbar from './Toolbar'
+import { ToolbarContext } from './ToolbarContext'
 import { useLocalStorageSet } from './Utils'
 
 function App() {
@@ -61,6 +52,7 @@ function App() {
   const [sjtuLessonLoading, setSjtuLessonLoading] = useState(false)
 
   const [loginDialog, setLoginDialog] = useState(false)
+  const [showMobileDrawer, setShowMobileDrawer] = useState(false)
 
   const removeStarLesson = (value) => {
     const set = new Set(starLesson)
@@ -114,6 +106,21 @@ function App() {
     return result
   }
 
+  const toolbarValue = {
+    filterFormState,
+    setFilterFormState,
+    starLesson,
+    setStarLesson,
+    selectedLesson,
+    setSelectedLesson,
+    sjtuLesson,
+    setSjtuLesson,
+    sjtuLessonLoading,
+    syncFromISJTU,
+    removeStarLesson,
+    colorize,
+  }
+
   return (
     <Router>
       <LoginModal show={loginDialog} nextStep={handleLogin}></LoginModal>
@@ -121,53 +128,24 @@ function App() {
       <div className='container-fluid h-100'>
         <div className='row h-100'>
           <div className='col-md-3 d-none d-md-block h-100 bg-light overflow-auto'>
-            <Switch>
-              <Route exact path='/'>
-                <Navbar />
-              </Route>
-              <Route path='/:semester'>
-                <Navbar />
-              </Route>
-            </Switch>
-
-            <div className='container'>
+            <ToolbarContext.Provider value={toolbarValue}>
+              <MobileDrawer
+                showMobileDrawer={showMobileDrawer}
+                setShowMobileDrawer={setShowMobileDrawer}
+              />
               <Switch>
                 <Route exact path='/'>
-                  <SemesterNav />
+                  <Navbar />
                 </Route>
-                <Route path='/:semester/:path'>
-                  <SemesterNav />
-                  <hr />
-                </Route>
-              </Switch>
-              <Switch>
-                <Route path='/:semester/browse'>
-                  <FilterForm
-                    state={filterFormState}
-                    setState={setFilterFormState}
-                  />
-                </Route>
-                <Route path='/:semester/plan'>
-                  <PlanForm
-                    starLesson={starLesson}
-                    removeStarLesson={removeStarLesson}
-                    state={selectedLesson}
-                    setState={setSelectedLesson}
-                    colorMapping={colorize(starLesson)}
-                  />
-                </Route>
-                <Route path='/:semester/classtable'>
-                  <ClassTableForm
-                    sjtuLesson={sjtuLesson}
-                    starLesson={starLesson}
-                    setStarLesson={setStarLesson}
-                    dataLoading={sjtuLessonLoading}
-                    syncFromISJTU={syncFromISJTU}
-                    colorMapping={colorize(sjtuLesson)}
-                  />
+                <Route path='/:semester'>
+                  <Navbar />
                 </Route>
               </Switch>
 
+              <Toolbar />
+            </ToolbarContext.Provider>
+
+            <div className='container'>
               <p className='text-muted my-3 small'>
                 免责声明：本网站课程相关数据来自上海交通大学教学信息服务网。具体开课情况以教务网为准。
               </p>
@@ -206,22 +184,7 @@ function App() {
             </div>
           </div>
           <div className='col-md-9 h-100 classtable-wrapper'>
-            <div className='mb-3'>
-              <Switch>
-                <Route path='/:semester/browse'>
-                  <ShowClassTable></ShowClassTable>
-                </Route>
-                <Route path='/:semester/plan'>
-                  <ShowClassTable></ShowClassTable>
-                </Route>
-                <Route path='/:semester/classtable'>
-                  <SyncButton
-                    syncFromISJTU={syncFromISJTU}
-                    dataLoading={sjtuLessonLoading}
-                  ></SyncButton>
-                </Route>
-              </Switch>
-            </div>
+            <MobileTopBar setShowMobileDrawer={setShowMobileDrawer} />
             <div className='classtable-frame w-100'>
               <Switch>
                 <Route path='/:semester/browse'>
